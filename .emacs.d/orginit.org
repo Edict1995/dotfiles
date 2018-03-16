@@ -1,0 +1,660 @@
+* Settings
+  Settings, vairables, and functions that are part of the emacs C core.
+** C Source Settings
+  #+BEGIN_SRC emacs-lisp
+  ;; General Variables
+  (setq auto-window-vscroll nil)
+  (setq default-directory "~/")
+  (setq inhibit-startup-screen t)
+  (setq ring-bell-function 'ignore)
+  (setq-default indicate-empty-lines t)
+
+  ;; General Functions
+  (tool-bar-mode nil)
+  (add-to-list 'default-frame-alist
+               '(font. "DejaVu Sans Mono"))
+  ;;General Aliases
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  ;;UTF-8 support
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  #+END_SRC
+
+** Libary Settings
+*** paragraph.el
+   #+BEGIN_SRC emacs-lisp
+     (setq sentence-end-double-space nil)
+   #+END_SRC
+
+* Packages
+** Internal Packages
+   Packages bundled with emacs.
+*** autorevert.el (Revert buffer when file changes)
+    #+BEGIN_SRC emacs-lisp
+      (use-package autorevert
+        :ensure nil
+        :init
+        (progn
+          (setq auto-revert-verbose nil)
+          )
+        (progn
+          (global-auto-revert-mode 1)
+          )
+        )
+    #+END_SRC
+
+*** custom.el (Custom Themes)
+    #+BEGIN_SRC emacs-lisp
+      (use-package custom
+        :ensure nil
+        :init
+        (progn
+          (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+          )
+        )
+    #+END_SRC
+
+*** delsel (Delete selection when inserting)
+    #+BEGIN_SRC emacs-lisp
+      (use-package delsel
+        :ensure nil
+        :config
+        (delete-selection-mode t)
+        )
+    #+END_SRC
+*** faces.el (Font and highlight core)
+    #+BEGIN_SRC emacs-lisp
+      (use-package faces
+        :ensure nil
+        :config
+        (set-face-attribute 'default nil :font "DejaVu Sans Mono-11")
+        )
+    #+END_SRC
+*** files.el (File input and output)
+    #+BEGIN_SRC emacs-lisp
+      (use-package files
+        :ensure nil
+        :config
+        (progn
+          (setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
+          (setq backup-by-copying t)
+          (setq version-control t)
+          (setq delete-old-versions t)
+          (setq kept-new-versions 20)
+          (setq kept-old-versions 5)
+          )
+        (progn
+          (global-set-key (kbd "<f5>") 'revert-buffer)
+          )
+        )
+    #+END_SRC
+
+*** flyspell.el (On the fly spell checking)
+    #+BEGIN_SRC emacs-lisp
+      (use-package flyspell
+        :ensure nil
+        )
+    #+END_SRC
+*** frame.el (Core frames functionality)
+    #+BEGIN_SRC emacs-lisp
+      (use-package frame
+        :ensure nil
+        :init
+        (add-to-list 'default-frame-alist '(fullscreen . maximized))
+        )
+    #+END_SRC
+*** hl-line.el (Highlight line)
+    #+BEGIN_SRC emacs-lisp
+      (use-package hl-line
+        :ensure nil
+        :config
+        (global-hl-line-mode)
+        )
+    #+END_SRC
+*** ido.el (Interactive Do)
+    #+BEGIN_SRC emacs-lisp
+      (use-package ido
+        :ensure nil
+        :init
+        (progn
+          (setq indo-enable-flex-matching t)
+          (setq ido-everywhere t)
+          )
+        (progn
+          (ido-mode 1)
+          )
+        )
+    #+END_SRC
+
+*** ispell.el (Spell checking)
+    #+BEGIN_SRC emacs-lisp
+      (if (string-equal system-type "windows-nt")
+          (use-package ispell
+             :ensure nil
+             :init
+             (setq ispell-dictionary "british")
+             (setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin")
+             )
+          (use-package ispell
+            :ensure nil))
+    #+END_SRC
+*** linum.el (Line Number)
+    #+BEGIN_SRC emacs-lisp
+      (use-package linum
+        :ensure nil
+        :init
+        (setq linum-delay nil)
+        (setq linum-format (quote dynamic))
+        :config
+        (global-linum-mode t)
+        )
+    #+END_SRC
+*** menu-bar.el (Menu bar)
+    #+BEGIN_SRC emacs-lisp
+      (use-package menu-bar
+        :ensure nil
+        :config
+        (menu-bar-mode -1)
+        )
+    #+END_SRC
+*** ob-core (Org babel core, code blocks in Org mode)
+    #+BEGIN_SRC emacs-lisp
+      (use-package ob-core
+        :ensure nil
+        :config
+        (setq org-babel-confirm-evaluate nil)
+        )
+    #+END_SRC
+*** org.el (Org mode, plain text editing)
+    #+BEGIN_SRC emacs-lisp
+      (use-package org
+        :ensure nil
+        :config
+        (setq org-src-fontify-natively t)
+        )
+    #+END_SRC
+*** org-src.el (Org mode, source editing)
+    #+BEGIN_SRC emacs-lisp
+    (use-package org-src
+      :ensure nil
+      :config
+      (setq org-src-tab-acts-natively t)
+      (setq org-edit-src-content-indentation 0)
+      )
+    #+END_SRC
+*** paren.el (Parethesis functionality)
+    #+BEGIN_SRC emacs-lisp
+      (use-package paren
+        :ensure nil
+        :init
+        (progn
+          (setq show-paren-delay 0)
+          (setq show-paren-style 'mixed)
+          )
+        (progn
+          (show-paren-mode t)
+          )
+        )
+    #+END_SRC
+*** scroll-bar.el (Scroll Bar)
+    #+BEGIN_SRC emacs-lisp
+      (use-package scroll-bar
+        :ensure nil
+        :config
+        (scroll-bar-mode -1)
+        )
+    #+END_SRC
+
+*** simple.el (Core functionality)
+    #+BEGIN_SRC emacs-lisp
+      (use-package simple
+        :ensure nil
+        :init
+        (setq save-interprogram-paste-before-kill t)
+        :config
+        (column-number-mode 1)
+        (global-visual-line-mode 1)
+        )
+    #+END_SRC
+
+*** subword.el (Subword mode; subword navigation)
+    #+BEGIN_SRC emacs-lisp
+      (use-package subword
+        :ensure nil
+        :config
+        (add-hook 'prog-mode-hook #'subword-mode)
+        )
+    #+END_SRC
+*** tool-bar.el (Tool bar)
+    #+BEGIN_SRC emacs-lisp
+      (use-package tool-bar
+        :ensure nil
+        :config
+        (tool-bar-mode -1)
+        )
+    #+END_SRC
+*** uniquify.el (Uniquify names)
+    #+BEGIN_SRC emacs-lisp
+      (use-package uniquify
+        :ensure nil
+        :init
+        (setq uniquify-buffer-name-style 'forward)
+        )
+    #+END_SRC
+
+*** whitespacce.el (Show whitespace and hidden characters)
+    #+BEGIN_SRC emacs-lisp
+      (use-package whitespace
+        :ensure nil
+        :config
+        (setq whitespace-style '(face tabs spaces newline space-mark tab-mark newline-mark))
+        :bind
+        ("C-c w" . global-whitespace-mode)
+        )
+    #+END_SRC
+** External Packages
+   Installed or to be installed packages.
+*** General Packages
+    Packages that make editor wide changes.
+
+**** Ace Window
+     #+BEGIN_SRC emacs-lisp
+            (use-package ace-window
+              :ensure t
+              :init
+              (global-set-key [remap other-window] 'ace-window))
+     #+END_SRC
+
+**** Aggressive Indent
+     #+BEGIN_SRC emacs-lisp
+       (use-package aggressive-indent
+         :ensure t
+         :config
+         (progn 
+           (setq global-aggressive-indent-mode 1)
+           )
+         )
+     #+END_SRC
+**** Avy (Screen Jump)
+     #+BEGIN_SRC emacs-lisp
+       (use-package avy
+         :ensure t
+         :config
+         (avy-setup-default)
+         )
+     #+END_SRC
+**** Base16 (Themes and themes framework)
+     #+BEGIN_SRC emacs-lisp
+       (use-package base16-theme
+         :ensure t
+         :config
+         (load-theme 'base16-classic-light t))
+     #+END_SRC
+**** Beacon (highlight cursor when scroll)
+     #+BEGIN_SRC emacs-lisp
+       (use-package beacon
+         :ensure t
+         :config
+         (beacon-mode 1)
+         )
+     #+END_SRC
+**** Company 
+     #+BEGIN_SRC emacs-lisp
+       (use-package company
+         :ensure t
+         :config
+         (global-company-mode)
+         )
+     #+END_SRC
+
+**** Counsel (Collection of Ivy enhanved version of Emacs commands)
+     #+BEGIN_SRC emacs-lisp
+       (use-package counsel
+         :ensure t
+         :bind
+         ("M-x" . counsel-M-x)
+         )
+     #+END_SRC
+**** Counsel-Projectile (Added projectile completion via counsel)
+     #+BEGIN_SRC emacs-lisp
+       (use-package counsel-projectile
+         :ensure t
+         :config
+         (add-hook 'after-init-hook 'counsel-projectile-mode)
+         )
+     #+END_SRC
+**** Crux (Collection of Ridiculously Useful eXtensions)
+     #+BEGIN_SRC emacs-lisp
+       (use-package crux
+         :ensure t
+         :bind
+         ("C-a" . crux-move-beginning-of-line)
+         ("S-<return>" . crux-smart-open-line)
+         )
+     #+END_SRC
+**** Dumb Jump (Souce Jump)
+     #+BEGIN_SRC emacs-lisp
+       (use-package dumb-jump
+         :ensure t
+         :bind
+         ("C-M-g" . dumb-jump-go)
+         ("C-M-p" . dumb-jump-back)
+         ("C-M-q" . dumb-jump-quick-look)
+         )
+     #+END_SRC
+**** Emojify (Emoji support)
+     #+BEGIN_SRC emacs-lisp
+       (use-package emojify
+         :ensure t
+         )
+     #+END_SRC
+**** Expand Region (Easier Selection)
+     #+BEGIN_SRC emacs-lisp
+       (use-package expand-region
+         :ensure t
+         :bind
+         ("C-=" . er/expand-region)
+         )
+     #+END_SRC
+**** Flycheck
+     #+BEGIN_SRC emacs-lisp
+       (use-package flycheck
+         :ensure t
+         :init
+         (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+         :config
+         (global-flycheck-mode)
+         )
+     #+END_SRC
+
+**** Fuzzy Search (Fuzzy file search)
+     #+BEGIN_SRC emacs-lisp
+       (use-package fzf
+         :ensure t)
+     #+END_SRC
+**** Git Gutter (Git in the gutter sidebar)
+     #+BEGIN_SRC emacs-lisp
+       (use-package git-gutter
+         :ensure t
+         :config
+         (global-git-gutter-mode 't)
+         )
+     #+END_SRC
+**** Git Time Machine (Veriosn history)
+     #+BEGIN_SRC emacs-lisp
+       (use-package git-timemachine
+         :ensure t
+         )
+     #+END_SRC
+**** Highlight indent Guides
+     #+BEGIN_SRC emacs-lisp
+       (use-package highlight-indent-guides
+         :ensure t
+         :init
+         (setq highlight-indent-guides-method 'character)
+         :config
+         (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+         )
+     #+END_SRC
+
+**** Hungry Delete (Delete groups of spaces)
+     #+BEGIN_SRC emacs-lisp
+       (use-package hungry-delete
+         :ensure t
+         :config
+         (global-hungry-delete-mode)
+         )
+     #+END_SRC
+**** iedit (Edit multiple of word/string/etc)
+     #+BEGIN_SRC emacs-lisp
+       (use-package iedit
+         :ensure t
+         )
+     #+END_SRC
+**** Ivy (Generic Completion Framework)
+     #+BEGIN_SRC emacs-lisp
+       (use-package ivy
+         :ensure t
+         :config
+         (ivy-mode t)
+         )
+     #+END_SRC
+**** Ivy hydra (Menu for Ivy commands)
+     #+BEGIN_SRC emacs-lisp
+       (use-package ivy-hydra
+         :ensure t
+         )
+     #+END_SRC
+**** Magit (Git intergration)
+     #+BEGIN_SRC emacs-lisp
+       (use-package magit
+         :ensure t
+         :bind
+         ("C-x g" . magit-status)
+         )
+     #+END_SRC
+**** Powerline (Improved modelline)
+     #+BEGIN_SRC emacs-lisp
+       (use-package powerline
+         :ensure t
+         :config
+         (setq powerline-default-separator 'utf-8)
+         )
+     #+END_SRC
+**** Projectile (Project management)
+     #+BEGIN_SRC emacs-lisp
+       (use-package projectile
+         :ensure t
+         :config
+         (projectile-mode)
+         (setq projectile-completion-system 'ivy)
+         )
+     #+END_SRC
+**** Rainbow delimters
+     #+BEGIN_SRC emacs-lisp
+       (use-package rainbow-delimiters
+         :ensure t
+         :hook
+         (prog-mode . rainbow-delimiters-mode)
+         )
+     #+END_SRC
+
+**** Rainbow Mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package rainbow-mode
+         :ensure t
+         :config
+         (progn
+           (define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
+             (lambda () (rainbow-mode 1)))
+           (my-global-rainbow-mode 1)
+           )
+         )
+     #+END_SRC
+
+**** Smartparens (Improved parens with auto-complete, etc.)
+     #+BEGIN_SRC emacs-lisp
+     (use-package smartparens
+       :ensure t
+       :config
+       (add-hook 'prog-mode-hook 'smartparens-mode)
+       (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
+       (use-package smartparens-config
+         :ensure nil
+         )
+       )
+     #+END_SRC
+**** Smex (Smart M-x)
+     #+BEGIN_SRC emacs-lisp
+       (use-package smex
+         :ensure t)
+     #+END_SRC
+**** Swiper (Ivy enhanced isearch)
+     #+BEGIN_SRC emacs-lisp
+       (use-package swiper
+         :ensure t
+         :config
+         (ivy-mode 1)
+         (setq ivy-use-virtual-buffers t)
+         (setq enable-recursive-minibuffers t)
+         (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+         :bind
+         ("M-s" . swiper)
+         ("C-c C-r" . 'ivy-resume)
+         ("<f6>" . 'ivy-resume)
+         ("M-x" . 'counsel-M-x)
+         ("C-x C-f" . 'counsel-find-file)
+         ("<f1> f" . 'counsel-describe-function)
+         ("<f1> v" . 'counsel-describe-variable)
+         ("<f1> l" . 'counsel-find-library)
+         ("<f2> i" . 'counsel-info-lookup-symbol)
+         ("<f2> u" . 'counsel-unicode-char)
+         ("C-c g" . 'counsel-git)
+         ("C-c j" . 'counsel-git-grep)
+         ("C-c k" . 'counsel-ag)
+         ("C-x l" . 'counsel-locate)
+         ("C-S-o" . 'counsel-rhythmbox)
+         )
+     #+END_SRC
+**** Theme Changer (Theme changing off sunset/rise)
+     #+BEGIN_SRC emacs-lisp
+       (use-package theme-changer
+         :ensure t
+         :init
+         (setq calendar-location-name "Auckland, New Zealand")
+         (setq calendar-latitude -36.848461)
+         (setq calendar-longitude 174.763336)
+         :config
+         (change-theme 'base16-classic-light 'base16-classic-dark)
+         )
+     #+END_SRC
+**** Try
+     #+BEGIN_SRC emacs-lisp
+       (use-package try
+         :ensure t)
+     #+END_SRC
+ 
+**** Undo Tree
+     #+BEGIN_SRC emacs-lisp
+       (use-package undo-tree
+         :ensure t
+         :init
+         (global-undo-tree-mode)
+         )
+     #+END_SRC
+
+**** Which Key
+     #+BEGIN_SRC emacs-lisp
+       (use-package which-key
+         :ensure t
+         :config
+         (which-key-mode)
+         )
+     #+END_SRC
+
+****next1
+**** Yasnippet
+     #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :config
+       (yas-global-mode 1))
+     #+END_SRC
+*** Specialist Packages
+    Packages for certain languages or enviroments.
+
+**** Clojure
+***** Clojure Mode (font-lock, indentation, navigation, and refactoring)
+     #+BEGIN_SRC emacs-lisp
+       (use-package clojure-mode
+         :ensure t
+         )
+     #+END_SRC
+
+***** Cider (Clojure REPL for emacs)
+      #+BEGIN_SRC emacs-lisp
+      (use-package cider
+        :ensure t
+        :config
+        )
+      #+END_SRC
+**** Markdown
+     #+BEGIN_SRC emacs-lisp
+       (use-package markdown-mode
+         :ensure t
+         :commands
+         (markdown-mode gfm-mode)
+         :mode
+         ("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         :init
+         (setq markdown-command "multimarkdown")
+         )
+     #+END_SRC
+**** SQL
+
+***** SQL indent
+     #+BEGIN_SRC emacs-lisp
+     (use-package sql-indent
+       :ensure t
+       :hook
+       ('sql-mode-hook . 'sqlind-minor-mode)
+       )
+     #+END_SRC
+
+***** sqlup mode
+      #+BEGIN_SRC emacs-lisp
+      (use-package sqlup-mode
+        :ensure t
+        :init
+        (add-hook 'sql-mode-hook 'sqlup-mode)
+        (add-hook 'sql-interactive-mode-hook 'sqlup-mode)
+        )
+      #+END_SRC
+
+**** Web Developement
+***** Web Mode
+      #+BEGIN_SRC emacs-lisp
+        (use-package web-mode
+          :ensure t
+          :init
+          (progn
+            (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+            (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+            (setq web-mode-engines-alist
+              '(("php"    . "\\.phtml\\'")
+                ("blade"  . "\\.blade\\."))
+              )
+            )
+          )
+      #+END_SRC
+
+***** Emmet Mode
+      #+BEGIN_SRC emacs-lisp
+        (use-package emmet-mode
+          :ensure t
+          :commands
+          emmet-mode
+          :hook
+          (html-mode-hook . emmet-mode)
+          (css-mode-hook . emmet-mode)
+          )
+      #+END_SRC
+
+***** JSON Mode
+      #+BEGIN_SRC emacs-lisp
+        (use-package json-mode
+          :ensure t
+          )
+      #+END_SRC
